@@ -1,0 +1,11 @@
+abteilung_id;steckbrief_id;beruf;vorname;nachname;geburtsdatum
+1;1;"Grafiker";"Marco";"Gerken";"1993-05-12"
+1;2;"Softwareentwickler";"Robert";"Bertrams";"1993-05-12"
+1;3;"Testerin";"Mia";"Lamm";"1993-05-12"
+1;4;"Abteilungsleiterin";"Leonie";"Walczyk";"1993-05-12"
+1;5;"Administrator";"Burkhard";"Peschek";"1993-05-12"
+1;6;"Prozessentwicklerin";"Marie";"Rast";"1993-05-12"
+1;7;"Scrum Master";"Karl";"Paczkowski";"1993-05-12"
+1;8;"Product Owner";"Fritz";"Dogan";"1993-05-12"
+1;9;"Product Owner";"Edith";"Giebel";"1993-05-12"
+1;10;"Product Owner";"Arthur";"Fakher";"1993-05-12"
