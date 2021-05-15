@@ -8,7 +8,7 @@ project for university to create a complex application
 
 # Structure
 
-```Bash
+```
 .  
 ├── backend/                # Folder for API + DB  
 |   ├── app/                # Stores FastAPI logic
