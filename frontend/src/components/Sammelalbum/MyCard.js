@@ -31,16 +31,10 @@ const useStyles = makeStyles({
   const classes = useStyles();
   const [openCard, setOpenCard] = useState(false);
   const [openQuizCard, setOpenQuizCard] = useState(false);
-  const {user_id,name,gesammelt,beruf} = props
-//   const [gesammelt,setGesammelt]=useState(false)
-//   const [beruf,setBeruf]=useState(props.beruf)
-
-//   // This will launch only if propName value has chaged.
-// useEffect(() => { setGesammelt(props.gesammelt); setBeruf(props.beruf); console.log("Gesammelt!") }, [props.gesammelt,props.beruf]);
+  const {user_id,name,gesammelt,beruf,currentUser} = props
 
 
   const handleClickOpen = () => {
-    console.log("Hello");
     setOpenCard(true);
   };
 
@@ -77,11 +71,8 @@ const useStyles = makeStyles({
         </CardContent>
       </CardActionArea>
       <CardDetail user_id={user_id} username={name} open={openCard} onClose={handleClose} openQuiz={handleQuizOpen} />
-      <QuizCard open={openQuizCard} onClose={handleQuizClose} user_id={user_id} updateUserState={props.updateUserState} />
+      <QuizCard open={openQuizCard} onClose={handleQuizClose} user_id={user_id} updateUserState={props.updateUserState} collected={gesammelt} currentUser={currentUser} />
       </Card>
-      
-
-
 
         )
     
@@ -93,4 +84,5 @@ MyCard.propTypes = {
   beruf: PropTypes.string,
   gesammelt: PropTypes.bool,
   updateUserState:PropTypes.func.isRequired,
+  currentUser: PropTypes.number
 }

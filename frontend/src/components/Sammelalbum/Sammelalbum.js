@@ -111,7 +111,7 @@ export function Sammelalbum(props) {
             <Grid item xs={12}></Grid>
               {results.map((result) => (
                 <Grid key={"MyCard_"+result.user_id} item  xs={6} xl={2} >
-                  <MyCard  user_id={result.user_id} name={result.vorname+" "+result.nachname} beruf={result.beruf} gesammelt={result.gesammelt} updateUserState={updateUserState} />
+                  <MyCard  user_id={result.user_id} name={result.vorname+" "+result.nachname} beruf={result.beruf} gesammelt={result.gesammelt} updateUserState={updateUserState} currentUser={currentUser} />
                 </Grid>
               ))}
 

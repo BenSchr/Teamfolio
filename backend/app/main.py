@@ -102,7 +102,6 @@ async def read_users(user_id:int,db: Session = Depends(get_db)):
 
 @app.get("/user/{user_id}/steckbrief", response_model=List[Frage_Antwort])
 async def read_test(user_id:int,db: Session = Depends(get_db)):
-    print(get_steckbrief_by_user(db,user_id=user_id))
     return  get_steckbrief_by_user(db,user_id=user_id)
 
 

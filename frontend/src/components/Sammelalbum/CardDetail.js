@@ -160,10 +160,9 @@ export function CardDetail(props) {
     const getResults = async () => {
      
   
-      try {
+      try {if(open){
         const response = await axios.get(`http://localhost:8000/user/`+user_id+`/steckbrief`);
-        console.log(response)
-        setSteckbrief(response.data)
+        setSteckbrief(response.data)}
       } catch (err) {
         setError(err)
       }
@@ -172,9 +171,9 @@ export function CardDetail(props) {
     };
   
     getResults();
-  }, [user_id])
+  }, [user_id,open])
 
-  return (
+  return (open?(
     <Dialog
       scroll={scroll}
       onClose={handleClose}
@@ -226,7 +225,7 @@ export function CardDetail(props) {
         </Grid>
       </DialogContent>
     </Dialog>
-  );
+  ):null);
 }
 
 CardDetail.propTypes = {
@@ -235,4 +234,5 @@ CardDetail.propTypes = {
   openQuiz : PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   username: PropTypes.string,
+  
 };
