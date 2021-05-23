@@ -1,17 +1,21 @@
 from pydantic import BaseModel
 import datetime
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 ## USER ##
 
 class UserBase(BaseModel):
-    abteilung_id: int
+    abteilung: str
     steckbrief_id: int
     beruf: str
     vorname: str
     nachname: str
-    geburtsdatum: datetime.date
+    geburtsdatum: Optional[datetime.date]
+    wohnort: Optional[str]
+
+    class Config:
+        orm_mode = True
 
 class UserCreate(UserBase):
     pass

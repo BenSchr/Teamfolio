@@ -4,15 +4,21 @@ from sqlalchemy.orm import relationship
 from .database import Base
 
 
+class Abteilung(Base):
+    __tablename__="abteilung"
+    abteilung_id=Column(Integer,primary_key=True,index=True)
+    name=Column(String(50))
+
 class User(Base):
     __tablename__="user"
     user_id = Column(Integer, primary_key=True, index=True)
-    abteilung_id=Column(Integer)
+    abteilung_id=Column(Integer,ForeignKey("abteilung.abteilung_id"))
     steckbrief_id=Column(Integer,ForeignKey("steckbrief.steckbrief_id"))
     beruf=Column(String(50))
     vorname=Column(String(50))
     nachname=Column(String(50))
     geburtsdatum=Column(Date)
+    wohnort=Column(String(50))
 
 class Collection(Base):
     __tablename__="collection"

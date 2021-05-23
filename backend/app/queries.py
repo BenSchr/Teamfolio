@@ -7,7 +7,16 @@ import pandas as pd
 import random
 
 def get_user(db: Session,user_id:int):
-    return db.query(models.User).filter(models.User.user_id==user_id).first()
+    user=models.User
+    abteilung=models.Abteilung
+    return db.query(user.user_id,
+         abteilung.name.label('abteilung'),
+         user.steckbrief_id,
+         user.beruf,
+         user.vorname,
+         user.nachname,
+         user.geburtsdatum,
+         user.wohnort).join(abteilung).filter(user.user_id==user_id).first()
 
 def get_steckbrief_by_user(db:Session,user_id:int):
     return db.query(models.User,models.Steckbrief,models.Steckbrief_Frage,models.Frage)\
@@ -47,13 +56,24 @@ models.User.user_id==user_id).statement,db.bind)
 
 def get_collection_by_userid(db:Session,user_id:int):
     collection = db.query(models.Collection).filter(models.Collection.user_id_aktiv==user_id).subquery()
-    
+    abteilung=models.Abteilung
+    user=models.User
+    users=db.query(user.user_id,
+        abteilung.name.label('abteilung'),
+        user.steckbrief_id,
+        user.beruf,
+        user.vorname,
+        user.nachname,
+        user.geburtsdatum,
+        user.wohnort).join(abteilung).subquery()
+
+
     check_collected = case([
         (collection.c.user_id_aktiv != None, 1)],
             else_=0
     )
 
-    return db.query(*models.User.__table__.columns,check_collected.label('gesammelt')).outerjoin(collection,models.User.user_id==collection.c.user_id_passiv).filter(models.User.user_id!=user_id).all()
+    return db.query(*users.c,check_collected.label('gesammelt')).outerjoin(collection,users.c.user_id==collection.c.user_id_passiv).filter(users.c.user_id!=user_id).all()
 
 def create_collection_entry(db:Session,collection:schemas.Collection):
     entry=models.Collection(user_id_aktiv=collection.user_id_aktiv,user_id_passiv=collection.user_id_passiv)

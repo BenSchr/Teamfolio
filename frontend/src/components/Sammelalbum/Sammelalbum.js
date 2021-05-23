@@ -10,10 +10,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import Switch from '@material-ui/core/Switch';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+
+
 
 const useStyles = makeStyles((theme) => ({
     body:{background: "#121212"},
@@ -39,17 +42,46 @@ const useStyles = makeStyles((theme) => ({
 
 
 
+
+
+
   
 
 export function Sammelalbum(props) {
     const [results, setResults] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
+    const [filterState, setFilterState] = React.useState({
+      filterGesammelt: false,
+      checkedB: true,
+    });
     const [spacing]= useState(3);
     const [openSnackbar,setOpenSnackbar]=useState({open:false,state:"success",message:"Snackbar message"})
     const classes = useStyles();
     const updatePagename = props.updatePagename;
-    const currentUser = 2
+    const currentUser = props.currentUser;
+
+
+    const handleFilterChange = (event) => {
+      setFilterState({ ...filterState, [event.target.name]: event.target.checked });
+      console.log(event.target.checked)
+      filterCollected(event.target.checked)
+    };
+
+    function logState(){
+      console.log(results)
+    }
+
+    function filterCollected(state){
+      var tmpResults=[...results]
+      tmpResults.map((entry) => {
+        if(entry.gesammelt){
+         entry.display=!state;
+        }return entry
+      });
+      setResults(tmpResults)
+    }
+
 
     const createEntry = async () => {
       try {
@@ -84,7 +116,11 @@ export function Sammelalbum(props) {
         setLoading(true)
         
         try {
+          console.log(currentUser)
           const response = await axios.get(`http://localhost:8000/user/`+currentUser+`/collection`);
+          response.data.map(entry=>{
+            return entry["display"]=true;
+          })
           setResults(response.data)
         } catch (err) {
           setError(err)
@@ -109,14 +145,23 @@ export function Sammelalbum(props) {
         ) : (<Container maxWidth="xl">
           <Grid container className={classes.grid} spacing={spacing}>
             <Grid item xs={12}></Grid>
-              {results.map((result) => (
+              {results.map((result) =>(
+                (result.display===true)?(
                 <Grid key={"MyCard_"+result.user_id} item  xs={6} xl={2} >
-                  <MyCard  user_id={result.user_id} name={result.vorname+" "+result.nachname} beruf={result.beruf} gesammelt={result.gesammelt} updateUserState={updateUserState} currentUser={currentUser} />
-                </Grid>
+                  <MyCard  user_id={result.user_id} name={result.vorname+" "+result.nachname} beruf={result.beruf} gesammelt={result.gesammelt} updateUserState={updateUserState} currentUser={currentUser} {...result}/>
+                </Grid>):null
               ))}
 
 <Grid item xs={2}><Button variant="contained" onClick={createEntry} color="primary">Add User 1</Button></Grid>
 <Grid item xs={2}><Button variant="contained" onClick={resetEntry} color="primary">Remove User 1</Button></Grid>
+<Grid item xs={2}><Button variant="contained" onClick={logState} color="primary">Filter View</Button></Grid>
+<Switch
+        checked={filterState.filterGesammelt}
+        onChange={handleFilterChange}
+        name="filterGesammelt"
+        inputProps={{ 'aria-label': 'secondary checkbox' }}
+      />
+
             </Grid>
             <Snackbar open={openSnackbar.open} autoHideDuration={3000} onClose={()=>setOpenSnackbar({...openSnackbar,open:false})} >
             <Alert onClose={()=>setOpenSnackbar({...openSnackbar,open:false})} severity={openSnackbar.state}>
@@ -124,8 +169,6 @@ export function Sammelalbum(props) {
         </Alert>
             </Snackbar>
             </Container>
-            
-            
         )}
       {error && <div>{error.message}</div>}
       </React.Fragment>)
@@ -133,4 +176,5 @@ export function Sammelalbum(props) {
 
   Sammelalbum.propTypes = {
     updatePagename : PropTypes.func.isRequired,
+    currentUser:PropTypes.number.isRequired,
   };
