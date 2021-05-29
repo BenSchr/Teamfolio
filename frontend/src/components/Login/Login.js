@@ -1,11 +1,9 @@
 
+import { Button, Checkbox, CssBaseline, FormControlLabel, Grid, Paper, TextField, useTheme } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { Face, Fingerprint } from '@material-ui/icons';
 import PropTypes from "prop-types";
-import {CssBaseline, useTheme} from "@material-ui/core"
-import React from "react";
-import { Paper, Grid, TextField, Button, FormControlLabel, Checkbox } from '@material-ui/core';
-import { Face, Fingerprint } from '@material-ui/icons'
-import {useState} from "react"
+import React, { useState } from "react";
 
 const useStyles = makeStyles(theme =>({
         login:{
@@ -17,7 +15,17 @@ const useStyles = makeStyles(theme =>({
           margin: theme.spacing(2)
       },
       padding: {
-          padding: theme.spacing(1)
+          padding: theme.spacing(1),
+
+      },
+      background:{
+          position: "fixed",
+          zIndex:-1,
+          left:0,
+          top:0,
+          width:"100vw",
+          height:"100vh",
+          background:" linear-gradient(90deg, rgba(253,29,29,1) 43%, rgba(168,29,253,1) 100%)"
       }
   }));
 
@@ -43,15 +51,16 @@ export function Login(props) {
     return (
         <React.Fragment>
         <CssBaseline/>
+        <div className={classes.background}/>
         <Grid
   container
   spacing={0}
   direction="column"
   alignItems="center"
   justify="center"
-  style={{ minHeight: '100vh', background:"linear-gradient(90deg, rgba(253,29,29,1) 7%, rgba(168,29,253,1) 100%, rgba(252,176,69,1) 100%)" }}
+  style={{ minHeight: '100vh', background:"rgba(255,255,255,0.3)",}}
 >
-       <Paper className={classes.padding}>
+       <Paper className={classes.padding} elevation={6}>
                 <div className={classes.margin}>
 
                 <Grid container spacing={1} alignItems="center" >

@@ -1,15 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles} from '@material-ui/core/styles';
-import {CardDetail} from './CardDetail';
-import {QuizCard} from './QuizCard';
 import LockOpenTwoToneIcon from '@material-ui/icons/LockOpenTwoTone';
-import { useState } from 'react';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { CardDetail } from './CardDetail';
+import { QuizCard } from './QuizCard';
 
 
 const useStyles = makeStyles({
@@ -59,7 +58,7 @@ const useStyles = makeStyles({
       <CardActionArea
       onClick={handleClickOpen}>
         <CardMedia className={classes.media}
-          image={"/static/images/profiles/"+((user_id<11)?user_id.toString():"profile_placeholder")+".jpg"}
+          image={"/static/images/profiles/"+(user_id.toString())+".jpg"}
           title={name}>{(!gesammelt)?(<LockOpenTwoToneIcon style={{ fontSize: 100, marginTop:"25%"}} color="secondary"/>):<div/>}</CardMedia>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">

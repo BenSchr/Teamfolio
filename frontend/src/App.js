@@ -1,25 +1,25 @@
 
-import './App.css';
-import {Sammelalbum} from './components/Sammelalbum/Sammelalbum';
-import React from 'react';
+import red from '@material-ui/core/colors/red';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import {Login} from './components/Login/Login'
-import {useState} from 'react'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
 
+  Route, Switch
+} from "react-router-dom";
+import './App.css';
+import { Erfolge } from './components/Erfolge/Erfolge';
+import { Login } from './components/Login/Login';
 import { NavigationBar } from './components/Navigation/NavigationBar';
-import red from '@material-ui/core/colors/red';
+import { Sammelalbum } from './components/Sammelalbum/Sammelalbum';
+
 
 
 function App(props) {
   const[pagename,setPagename] = React.useState("Test")
-  const [token, setToken] = useState(true);
-  const [currentUser, setCurrentUser] = useState(2);
+  const [token, setToken] = useState();
+  const [currentUser, setCurrentUser] = useState();
 
   const darkTheme = createMuiTheme({
     palette: {
@@ -45,7 +45,6 @@ return (
     <div className="App">
     <React.Fragment>
     <CssBaseline />
-
     <NavigationBar pagename={pagename}/>
      {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
@@ -54,7 +53,7 @@ return (
           <p>Statistiken</p>
           </Route>
           <Route path="/achievements">
-            <p>Erfolge</p>
+            <Erfolge updatePagename={setPagename} currentUser={currentUser}/>
           </Route>
           <Route path="/">
             <Sammelalbum updatePagename={setPagename} currentUser={currentUser}/>
