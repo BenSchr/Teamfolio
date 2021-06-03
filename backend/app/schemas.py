@@ -78,3 +78,19 @@ class Quiz(BaseModel):
 class Collection(BaseModel):
     user_id_aktiv:int
     user_id_passiv:int
+
+
+
+## Erfolge ##
+class Erfolg_User(BaseModel):
+    user_id:int
+    erfolg_id:int
+
+
+class Erfolg(BaseModel):
+    erfolg_id:int
+    name:str
+    bildpfad:str
+
+class Erfolg_gesammelt(Erfolg):
+    gesammelt:int

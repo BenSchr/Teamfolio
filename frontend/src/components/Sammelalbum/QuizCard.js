@@ -15,6 +15,12 @@ import Box from '@material-ui/core/Box';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Divider from '@material-ui/core/Divider';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const styles = (theme) => ({
   root: {
@@ -117,12 +123,17 @@ const QuizQuestion = withStyles(styles)((props) => {
 
 export function QuizCard(props) {
   const [quizList, setQuizlist] = useState([]);
-  const { onClose, open, user_id,updateUserState,collected } = props;
+  const { onClose, open, user_id,updateUserState,collected,currentUser } = props;
   const [scroll] = useState("paper");
   const [activeStep, setActiveStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [numCorrect,setNumCorrect] = useState(0);
   const progressInc = 100/quizList.length;
+  const [openSnackbar, setOpenSnackbar] = useState({
+    open: false,
+    state: "success",
+    message: "Snackbar message",
+  });
   
 
   useEffect(() => {
@@ -140,6 +151,20 @@ export function QuizCard(props) {
   
     getResults();
   }, [user_id])
+
+
+  const checkAchievements = async()=>{
+    const response = await axios.post(`http://localhost:8000/user/`+currentUser+`/check_achievements`);
+    console.log(response)
+    response.data.map((x)=>(
+      setOpenSnackbar({
+        open: true,
+        state: "success",
+        message: "Neuer Erfolg!"
+        
+    })))}
+
+
 
   const createEntry = async () => {
     try {
@@ -162,7 +187,9 @@ export function QuizCard(props) {
 
   const checkWin = () => {
       const win=(numCorrect/quizList.length)>= 0.8;
-      if(!collected&&win&&quizList.length>0){createEntry()}
+      if(!collected&&win&&quizList.length>0){createEntry(); checkAchievements();}
+
+
       return win
   }
 
@@ -220,7 +247,20 @@ export function QuizCard(props) {
         )}
            <LinearProgressWithLabel progress={progress} currentStep={activeStep} maxStep={quizList.length} />
       </DialogContent>
-    </Dialog>):null
+      <Snackbar
+    open={openSnackbar.open}
+    autoHideDuration={3000}
+    onClose={() => setOpenSnackbar({ ...openSnackbar, open: false })}
+  >
+    <Alert
+      onClose={() => setOpenSnackbar({ ...openSnackbar, open: false })}
+      severity={openSnackbar.state}
+    >
+      {openSnackbar.message}
+    </Alert>
+  </Snackbar>
+    </Dialog>    
+    ):null
   );
 
         }

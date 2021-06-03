@@ -128,3 +128,15 @@ async def delete_collection(entry: Collection,db: Session = Depends(get_db)):
     return {"numDelRows":response}
 
 
+@app.post("/user/{user_id}/check_achievements",response_model=List[Erfolg_gesammelt])
+async def check_achievements(user_id:int,db:Session = Depends(get_db)):
+    achievements=get_achievements(db,user_id)
+    collection_size=get_size_collection(db,user_id)
+    new_achievements=achievement_helper([x for x in achievements if x["gesammelt"]==0],collection_size)
+    results=[]
+    for new in new_achievements:
+        results.append(create_erfolg_user_entry(db,Erfolg_User.parse_obj({"user_id":user_id,"erfolg_id":new["erfolg_id"]})))
+    
+    return new_achievements
+    
+    

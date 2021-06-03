@@ -141,6 +141,15 @@ export function Sammelalbum(props) {
     }
   }
 
+  function filterReset(){
+   
+    setFilterState({
+      filterGesammelt: "",
+      filterAbteilung: "",
+      filterName: "",
+    });
+    setFilteredResults([...results]);
+  }
   const createEntry = async () => {
     try {
       const response = await axios.post(
@@ -280,10 +289,16 @@ export function Sammelalbum(props) {
                   label="name"
                   value={filterState.filterName}
                   onChange={handleFilterChange}
+                  autoComplete="off"
                 />
               </FormControl>
             </Grid>
-            <Grid item xs={4} style={{textAlign:"right" }}><FormControlLabel
+            <Grid item xs={2} style={{ textAlign: "left", alignSelf:"center" }}>
+            <Button  onClick={filterReset} variant="outlined" color="default" >
+                Reset Filters
+              </Button>
+            </Grid>
+            <Grid item xs={2} style={{textAlign:"right" }}><FormControlLabel
         control={
           <Checkbox
             checked={dummyUser}

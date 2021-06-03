@@ -4,6 +4,17 @@ from sqlalchemy.orm import relationship
 from .database import Base
 
 
+class Erfolg(Base):
+    __tablename__="erfolg"
+    erfolg_id=Column(Integer,primary_key=True,index=True)
+    name=Column(String(50))
+    bildpfad=Column(String(200))
+
+class Erfolg_User(Base):
+    __tablename__="erfolg_user"
+    user_id=Column(Integer,ForeignKey("user.user_id"),primary_key=True)
+    erfolg_id=Column(Integer,ForeignKey("erfolg.erfolg_id"),primary_key=True)
+
 class Abteilung(Base):
     __tablename__="abteilung"
     abteilung_id=Column(Integer,primary_key=True,index=True)

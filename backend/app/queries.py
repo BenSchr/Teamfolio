@@ -81,3 +81,49 @@ def create_collection_entry(db:Session,collection:schemas.Collection):
     db.commit()
     db.refresh(entry)
     return entry
+
+
+def create_erfolg_user_entry(db:Session,entry:schemas.Erfolg_User):
+    new_entry=models.Erfolg_User(user_id=entry.user_id,erfolg_id=entry.erfolg_id)
+    db.add(new_entry)
+    db.commit()
+    db.refresh(new_entry)
+    return new_entry
+
+
+def get_size_collection(db:Session,user_id:int):
+    return db.query(models.Collection).filter(models.Collection.user_id_aktiv==user_id).count() 
+
+
+def get_achievements(db:Session,user_id:int):
+    collection = db.query(models.Erfolg_User).filter(models.Erfolg_User.user_id==user_id).subquery()
+
+    check_collected = case([
+        (collection.c.user_id != None, 1)],
+            else_=0
+    )
+
+    result=db.query(models.Erfolg.erfolg_id,models.Erfolg.name,models.Erfolg.bildpfad,check_collected.label('gesammelt')).outerjoin(collection,models.Erfolg.erfolg_id==collection.c.erfolg_id).all()
+    return [dict(zip(['erfolg_id','name','bildpfad','gesammelt'],r)) for r in result]
+
+
+
+def achievement_helper(missing_achievements,size_collection:int):
+    new_achievements=[]
+    for a in missing_achievements:
+        name = a["name"]
+        if name=="1_User":
+            if size_collection>=1:
+                new_achievements.append(a)
+        
+        elif name=="5_User":
+            if size_collection>=5:
+                new_achievements.append(a)
+        
+        elif name=="10_User":
+            if size_collection>=10:
+                new_achievements.append(a)
+
+    return new_achievements
+            
+
