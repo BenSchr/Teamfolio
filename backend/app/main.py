@@ -127,6 +127,12 @@ async def delete_collection(entry: Collection,db: Session = Depends(get_db)):
     db.commit()
     return {"numDelRows":response}
 
+@app.delete("/erfolg/delete")
+async def delete_erfolg(entry: Erfolg_User,db: Session = Depends(get_db)):
+    response = db.query(models.Erfolg_User).filter(models.Erfolg_User.user_id==entry.user_id,models.Erfolg_User.erfolg_id==entry.erfolg_id).delete()
+    db.commit()
+    return {"numDelRows":response}
+
 
 @app.post("/user/{user_id}/check_achievements",response_model=List[Erfolg_gesammelt])
 async def check_achievements(user_id:int,db:Session = Depends(get_db)):
@@ -136,7 +142,9 @@ async def check_achievements(user_id:int,db:Session = Depends(get_db)):
     results=[]
     for new in new_achievements:
         results.append(create_erfolg_user_entry(db,Erfolg_User.parse_obj({"user_id":user_id,"erfolg_id":new["erfolg_id"]})))
-    
+
     return new_achievements
-    
-    
+
+@app.get("/user/{user_id}/get_achievements",response_model=List[Erfolg_gesammelt])
+async def get_achievements_user(user_id:int,db:Session = Depends(get_db)):
+    return get_achievements(db,user_id)   

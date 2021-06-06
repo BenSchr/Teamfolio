@@ -70,7 +70,7 @@ const useStyles = makeStyles({
         </CardContent>
       </CardActionArea>
       <CardDetail user_id={user_id} username={name} open={openCard} onClose={handleClose} openQuiz={handleQuizOpen} {...props} />
-      <QuizCard open={openQuizCard} onClose={handleQuizClose} user_id={user_id} updateUserState={props.updateUserState} collected={gesammelt} currentUser={currentUser} />
+      <QuizCard open={openQuizCard} onClose={handleQuizClose} user_id={user_id} updateUserState={props.updateUserState} collected={gesammelt} currentUser={currentUser} {...props} />
       </Card>
 
         )

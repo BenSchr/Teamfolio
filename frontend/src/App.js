@@ -33,7 +33,7 @@ function App(props) {
     },
   });
 
-  if(!token) {
+  if(!token||currentUser===null) {
    
     return  <ThemeProvider theme={darkTheme}><Login setToken={setToken} setCurrentUser={setCurrentUser} /></ThemeProvider>
   }
@@ -45,7 +45,7 @@ return (
     <div className="App">
     <React.Fragment>
     <CssBaseline />
-    <NavigationBar pagename={pagename}/>
+    <NavigationBar pagename={pagename} currentUser={currentUser}  setCurrentUser={setCurrentUser}/>
      {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>

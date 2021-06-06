@@ -1,7 +1,13 @@
-import { AppBar, Checkbox, FormControlLabel, MenuItem, Toolbar } from "@material-ui/core";
+import {
+  AppBar,
+  Checkbox,
+  FormControlLabel,
+  MenuItem,
+  Toolbar
+} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
-import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -54,30 +60,30 @@ const useStyles = makeStyles((theme) => ({
 const DummyCard = (props) => {
   return (
     <Card elevation={2} styles={{ textAlign: "center" }}>
-       <CardActionArea>
-      <CardMedia
-     style={{ height: 240,
-      maxHeight:"30vh",textAlign:"center"}}
-        image={"/static/images/profiles/profile_placeholder.jpg"}
-        title={"Dummy User"}
-      >
-        <LockOpenTwoToneIcon
-          style={{
-            fontSize: 100,
-            height: 240,
-            maxHeight: "30vh",
-          }}
-          color="secondary"
-        />
-      </CardMedia>
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
-          {"Dummy User"}
-        </Typography>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {"DummyBeruf"}
-        </Typography>
-      </CardContent></CardActionArea>
+      <CardActionArea>
+        <CardMedia
+          style={{ height: 240, maxHeight: "30vh", textAlign: "center" }}
+          image={"/static/images/profiles/profile_placeholder.jpg"}
+          title={"Dummy User"}
+        >
+          <LockOpenTwoToneIcon
+            style={{
+              fontSize: 100,
+              height: 240,
+              maxHeight: "30vh",
+            }}
+            color="secondary"
+          />
+        </CardMedia>
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            {"Dummy User"}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            {"DummyBeruf"}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
     </Card>
   );
 };
@@ -87,7 +93,8 @@ export function Sammelalbum(props) {
   const [filteredResults, setFilteredResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [dummyUser,setDummyUser] = useState(true)
+  const [dummyUser, setDummyUser] = useState(true);
+
   const [filterState, setFilterState] = React.useState({
     filterGesammelt: "",
     filterAbteilung: "",
@@ -98,6 +105,7 @@ export function Sammelalbum(props) {
     open: false,
     state: "success",
     message: "Snackbar message",
+    duration: null,
   });
   const classes = useStyles();
   const updatePagename = props.updatePagename;
@@ -141,8 +149,7 @@ export function Sammelalbum(props) {
     }
   }
 
-  function filterReset(){
-   
+  function filterReset() {
     setFilterState({
       filterGesammelt: "",
       filterAbteilung: "",
@@ -150,42 +157,24 @@ export function Sammelalbum(props) {
     });
     setFilteredResults([...results]);
   }
-  const createEntry = async () => {
-    try {
-      const response = await axios.post(
-        `http://localhost:8000/collection/create`,
-        { user_id_aktiv: 2, user_id_passiv: 1 }
-      );
-      if (response.status === 200) {
-        updateUserState(1, true);
-        console.log(response);
-        setOpenSnackbar({
-          open: true,
-          state: "success",
-          message: "User added to database",
-        });
-      }
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        state: "error",
-        message: error.response.data.detail,
-      });
-    }
-  };
-
+ 
   const resetEntry = async () => {
     try {
       const response = await axios.delete(
         `http://localhost:8000/collection/delete`,
         { data: { user_id_aktiv: 2, user_id_passiv: 1 } }
       );
-      if (response.status === 200 && response.data.numDelRows > 0) {
+      const response2 = await axios.delete(
+        `http://localhost:8000/erfolg/delete`,
+        { data: { user_id: 2, erfolg_id: 2 } }
+      );
+      if (response.status === 200 && response.data.numDelRows > 0 && response2.status === 200) {
         updateUserState(1, false);
         setOpenSnackbar({
           open: true,
           state: "success",
           message: response.data.numDelRows + " Entries deleted from database",
+          duration: 3000,
         });
       } else {
         setOpenSnackbar({
@@ -196,7 +185,12 @@ export function Sammelalbum(props) {
       }
     } catch (error) {
       console.log(error);
-      setOpenSnackbar({ open: true, state: "error", message: error.message });
+      setOpenSnackbar({
+        open: true,
+        state: "error",
+        message: error.message,
+        duration: 3000,
+      });
     }
   };
 
@@ -221,7 +215,7 @@ export function Sammelalbum(props) {
         setResults(response.data);
         setFilteredResults(response.data);
       } catch (err) {
-        setError(err);
+        setError(err.message);
       }
 
       setLoading(false);
@@ -293,28 +287,31 @@ export function Sammelalbum(props) {
                 />
               </FormControl>
             </Grid>
-            <Grid item xs={2} style={{ textAlign: "left", alignSelf:"center" }}>
-            <Button  onClick={filterReset} variant="outlined" color="default" >
+            <Grid
+              item
+              xs={2}
+              style={{ textAlign: "left", alignSelf: "center" }}
+            >
+              <Button onClick={filterReset} variant="outlined" color="default">
                 Reset Filters
               </Button>
             </Grid>
-            <Grid item xs={2} style={{textAlign:"right" }}><FormControlLabel
-        control={
-          <Checkbox
-            checked={dummyUser}
-            onChange={(event)=>setDummyUser(event.target.checked)}
-            name="checkedDummyUser"
-            color="primary"
-          />} label="DummyUser"/>
+            <Grid item xs={2} style={{ textAlign: "right" }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={dummyUser}
+                    onChange={(event) => setDummyUser(event.target.checked)}
+                    name="checkedDummyUser"
+                    color="primary"
+                  />
+                }
+                label="DummyUser"
+              />
             </Grid>
-            <Grid item xs={1} style={{textAlign:"right" }}>
-              <Button variant="contained" onClick={createEntry} color="primary">
-                Add User 1
-              </Button>
-            </Grid>
-            <Grid item xs={1} style={{textAlign:"right" }}>
+            <Grid item xs={1} style={{ textAlign: "right" }}>
               <Button variant="contained" onClick={resetEntry} color="primary">
-                Remove User 1
+                Reset Demo
               </Button>
             </Grid>
           </Grid>
@@ -350,20 +347,23 @@ export function Sammelalbum(props) {
                   gesammelt={result.gesammelt}
                   updateUserState={updateUserState}
                   currentUser={currentUser}
+                  setOpenAchievementBar={setOpenSnackbar}
                   {...result}
                 />
               </Grid>
             ))}
-            
-            {(dummyUser)?(_.times(20, (i) => (
-              <Grid key={"Dummy_" + i} item xs={6} xl={2}>
-                <DummyCard/>
-              </Grid>
-            ))):null}
+
+            {dummyUser
+              ? _.times(20, (i) => (
+                  <Grid key={"Dummy_" + i} item xs={6} xl={2}>
+                    <DummyCard />
+                  </Grid>
+                ))
+              : null}
           </Grid>
           <Snackbar
             open={openSnackbar.open}
-            autoHideDuration={3000}
+            autoHideDuration={openSnackbar.duration}
             onClose={() => setOpenSnackbar({ ...openSnackbar, open: false })}
           >
             <Alert

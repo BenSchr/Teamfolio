@@ -45,13 +45,13 @@ models.User.user_id==user_id).statement,db.bind)
         catalog=[]
         catalog.append(row["antwort_original"])
         random.shuffle(row["antwort_extra"])
-        catalog+=row["antwort_extra"][:3]
+        catalog+=[x for x in row["antwort_extra"] if x!=row["antwort_original"]][:3]
         random.shuffle(catalog)
         row["catalog"]=catalog
         del row['antwort_extra']
         quiz_list.append(row)
-    
-    return quiz_list
+    random.shuffle(quiz_list)
+    return quiz_list[:5]
 
 
 def get_collection_by_userid(db:Session,user_id:int):
