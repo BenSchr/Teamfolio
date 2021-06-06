@@ -1,4 +1,4 @@
-import { Chip, DialogContent } from "@material-ui/core";
+import { Box, Chip, DialogContent, useTheme } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -6,7 +6,6 @@ import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import Slide from "@material-ui/core/Slide";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -14,14 +13,12 @@ import Typography from "@material-ui/core/Typography";
 import ApartmentIcon from "@material-ui/icons/Apartment";
 import CakeIcon from "@material-ui/icons/Cake";
 import CloseIcon from "@material-ui/icons/Close";
-import CodeIcon from "@material-ui/icons/Code";
 import HomeIcon from "@material-ui/icons/Home";
 import VideogameAssetIcon from "@material-ui/icons/VideogameAsset";
 import WorkIcon from "@material-ui/icons/Work";
 import axios from "axios";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-
 const styles = (theme) => ({
   title: {
     margin: 0,
@@ -139,16 +136,16 @@ const DetailList = withStyles(styles)((props) => {
   const steckbrief = props.steckbrief;
   const classes = props.classes
   return (
-    <List className={classes.list} style={{}}>
+    <List className={classes.list}>
       {steckbrief.map((item) => (
         <ListItem key={item.frage_id}>
-          <ListItemAvatar>
-            <CodeIcon fontSize="large" />
-          </ListItemAvatar>
+          {/* <ListItemAvatar>
+            <HelpIcon fontSize="large" />
+          </ListItemAvatar> */}
           <ListItemText
             primary={<Typography variant="h6">{item.frage}</Typography>}
             secondary={
-              <Typography variant="h6" color="primary" gutterBottom>
+              <Typography variant="h5" color="primary" gutterBottom>
                 {item.antwort}
               
               </Typography>
@@ -175,7 +172,7 @@ export function CardDetail(props) {
     gesammelt,
   } = props;
   const classes = useStyles();
-
+  const theme = useTheme();
   const [scroll] = React.useState("paper");
 
   const handleClose = () => {
@@ -203,6 +200,8 @@ export function CardDetail(props) {
 
     getResults();
   }, [user_id, open]);
+
+  
 
   return open ? (
     <Dialog
@@ -332,8 +331,8 @@ export function CardDetail(props) {
             ) : (
               <Grid item xs={12}>
                 <Typography variant="h4">
-                  Du hast <Typography color="primary" variant="h4" display="inline">{username}</Typography> noch nicht gesammelt, starte jetzt das
-                   <Typography color="primary" variant="h4"  display="inline"> Quiz</Typography>!
+                  Du hast  <Box color={theme.palette.primary.main} display="inline">{username}</Box> noch nicht gesammelt, starte jetzt das
+                   <Box color={theme.palette.primary.main} display="inline"> Quiz</Box> !
                 </Typography>
               </Grid>
             )}

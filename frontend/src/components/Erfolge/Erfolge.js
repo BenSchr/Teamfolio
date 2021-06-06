@@ -47,7 +47,6 @@ export function Erfolge(props) {
           `http://localhost:8000/user/` + currentUser + `/get_achievements`
         );
         setResults(response.data);
-        console.log(response.data);
       } catch (err) {
         console.log(err)
         setError(err.message);
