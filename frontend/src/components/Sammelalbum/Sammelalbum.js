@@ -93,7 +93,7 @@ export function Sammelalbum(props) {
   const [filteredResults, setFilteredResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [dummyUser, setDummyUser] = useState(true);
+  const [dummyUser, setDummyUser] = useState(false);
 
   const [filterState, setFilterState] = React.useState({
     filterGesammelt: "",
@@ -145,7 +145,7 @@ export function Sammelalbum(props) {
     if (state === "") {
       return objects;
     } else {
-      return objects.filter((entry) => entry.vorname.includes(state));
+      return objects.filter((entry) => (entry.vorname + " "+ entry.nachname).toLowerCase().includes(state.toLowerCase()));
     }
   }
 
