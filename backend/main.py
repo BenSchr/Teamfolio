@@ -3,18 +3,23 @@ from typing import List
 import databases
 import sqlalchemy
 from fastapi import FastAPI,Depends, HTTPException
-
+import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
-import sys
+import os
+# abspath = os.path.abspath(__file__)
+# dname = os.path.dirname(abspath)
+# os.chdir(dname)
+
+
+
 from sqlalchemy.orm import Session
-# Add the ptdraft folder path to the sys.path list
-sys.path.append('..')
 from app import models
 from app.schemas import *
 from app.database import engine,SessionLocal
 from app.queries import *
 from fastapi.encoders import jsonable_encoder
+
 
 # # SQLAlchemy specific code, as with any other app
 # DATABASE_URL = "sqlite:///./db/test.db"
@@ -57,6 +62,8 @@ origins = [
     "localhost:3000",
     "http://localhost:5000",
     "localhost:5000",
+    "http://localhost",
+    "null"
 ]
 
 
@@ -67,29 +74,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-
-
-# @app.on_event("startup")
-# async def startup():
-#     await database.connect()
-
-
-# @app.on_event("shutdown")
-# async def shutdown():
-#     await database.disconnect()
-
-
-# @app.get("/cards/", response_model=List[Card])
-# async def read_cards():
-#     query = cards.select()
-#     return await database.fetch_all(query)
-
-
-# @app.post("/cards/", response_model=Card)
-# async def create_card(card: CardIn):
-#     query = cards.insert().values(name=card.name, value=card.value)
-#     last_record_id = await database.execute(query)
-#     return {**card.dict(), "id": last_record_id}
 
 @app.get("/user/", response_model=List[User])
 async def read_users(db: Session = Depends(get_db)):
@@ -121,15 +105,15 @@ async def create_collection(collection: Collection,db: Session = Depends(get_db)
     except:
         raise HTTPException(status_code=400, detail="Could not create user",headers={"X-Error": "There goes my error"})
 
-@app.delete("/collection/delete")
-async def delete_collection(entry: Collection,db: Session = Depends(get_db)):
-    response = db.query(models.Collection).filter(models.Collection.user_id_aktiv==entry.user_id_aktiv,models.Collection.user_id_passiv==entry.user_id_passiv).delete()
+@app.delete("/user/{user_id}/collection/delete")
+async def delete_collection(user_id:int,db: Session = Depends(get_db)):
+    response = db.query(models.Collection).filter(models.Collection.user_id_aktiv==user_id).delete()
     db.commit()
     return {"numDelRows":response}
 
-@app.delete("/erfolg/delete")
-async def delete_erfolg(entry: Erfolg_User,db: Session = Depends(get_db)):
-    response = db.query(models.Erfolg_User).filter(models.Erfolg_User.user_id==entry.user_id,models.Erfolg_User.erfolg_id==entry.erfolg_id).delete()
+@app.delete("/user/{user_id}/erfolg/delete")
+async def delete_erfolg(user_id: int,db: Session = Depends(get_db)):
+    response = db.query(models.Erfolg_User).filter(models.Erfolg_User.user_id==user_id).delete()
     db.commit()
     return {"numDelRows":response}
 
@@ -148,3 +132,10 @@ async def check_achievements(user_id:int,db:Session = Depends(get_db)):
 @app.get("/user/{user_id}/get_achievements",response_model=List[Erfolg_gesammelt])
 async def get_achievements_user(user_id:int,db:Session = Depends(get_db)):
     return get_achievements(db,user_id)   
+
+
+
+if __name__ == "__main__":
+    print(os.getcwd())
+    uvicorn.run(app, host="127.0.0.1", port=8000, log_level="info")
+    

@@ -63,7 +63,7 @@ const DummyCard = (props) => {
       <CardActionArea>
         <CardMedia
           style={{ height: 240, maxHeight: "30vh", textAlign: "center" }}
-          image={"/static/images/profiles/profile_placeholder.jpg"}
+          image={"./static/images/profiles/profile_placeholder.jpg"}
           title={"Dummy User"}
         >
           <LockOpenTwoToneIcon
@@ -161,15 +161,14 @@ export function Sammelalbum(props) {
   const resetEntry = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:8000/collection/delete`,
-        { data: { user_id_aktiv: 2, user_id_passiv: 1 } }
+        `http://localhost:8000/user/`+currentUser+`/collection/delete`
       );
       const response2 = await axios.delete(
-        `http://localhost:8000/erfolg/delete`,
-        { data: { user_id: 2, erfolg_id: 2 } }
-      );
+        `http://localhost:8000/user/`+currentUser+`/erfolg/delete`);
       if (response.status === 200 && response.data.numDelRows > 0 && response2.status === 200) {
-        updateUserState(1, false);
+        results.map((user)=>(
+          updateUserState(user.user_id,false)
+        ))
         setOpenSnackbar({
           open: true,
           state: "success",

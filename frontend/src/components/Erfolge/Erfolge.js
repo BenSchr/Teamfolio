@@ -96,7 +96,7 @@ export function Erfolge(props) {
                 style={{textAlign:"center"}}
                 title={x.name}
               ><img  style={{height:240,width:"auto"}} src={
-                "static/images/erfolge/" +
+                "./static/images/erfolge/" +
                 (x.gesammelt === 1 ? x.bildpfad : "erfolg0") +
                 ".png"
               } alt={x.name}/></CardMedia>

@@ -46,6 +46,12 @@ const styles = (theme) => ({
     fontSize: "1.5em",
     color: "lightblack",
   },
+  quizButtonCorrect:{
+    height: "100%",
+    width: "100%",
+    fontSize: "1.5em",
+    borderBottom: "solid 5px #4caf50",
+  }
 });
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -71,7 +77,7 @@ const DialogTitle = withStyles(styles)((props) => {
 });
 
 function LinearProgressWithLabel(props) {
-  const { progress, maxStep, currentStep } = props;
+  const { progress, maxStep, currentStep} = props;
   return (
     <Box display="flex" alignItems="center">
       <Box width="100%" mr={1}>
@@ -91,7 +97,7 @@ function LinearProgressWithLabel(props) {
 }
 
 const QuizQuestion = withStyles(styles)((props) => {
-  const { question, catalog, nextStep, classes } = props;
+  const { question, catalog, nextStep, classes,question_id,antwort_original } = props;
   return (
     <Grid container justify="center" alignItems="center" spacing={3}>
       <Grid item xs={12}>
@@ -101,18 +107,18 @@ const QuizQuestion = withStyles(styles)((props) => {
       </Grid>
 
       <Grid container item className={classes.questionGrid}>
-        {catalog.map((option) => (
+        {catalog.map((option,index) => (
           <Grid
-            key={question+"_option_" + option}
+            key={question_id+"_key_"+index}
             item
             xs={12}
             md={5}
             style={{ height: "40%" }}
-          >
+            id={question_id+"_key_"+index}>
             <Button
               variant="contained"
               onClick={nextStep.bind(this, option)}
-              className={classes.quizButton}
+              className={(antwort_original===option)?classes.quizButtonCorrect:classes.quizButton}
             >
               {option}
             </Button>
@@ -170,7 +176,7 @@ export function QuizCard(props) {
         { user_id_aktiv: props.currentUser, user_id_passiv: user_id }
       );
       if (response.status === 200) {
-        updateUserState(1, true);
+        updateUserState(user_id, true);
         console.log(response);
         checkAchievements();
       }
@@ -186,6 +192,8 @@ export function QuizCard(props) {
         question={quiz_item.frage}
         catalog={quiz_item.catalog}
         nextStep={handleNext}
+        question_id={quiz_item.frage_id}
+        antwort_original={quiz_item.antwort_original}
       ></QuizQuestion>
     );
   }

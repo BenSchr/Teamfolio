@@ -65,11 +65,9 @@ export function Login(props) {
 
                 <Grid container spacing={1} alignItems="center" >
                         <Grid item style={{textAlign:"center",marginBottom:"10px"}} xs={true}>
-                          <img src="/static/images/logo/teamfolio_logo.png" alt="teamfolio logo" style={{width:"200px",maxWidth:"60vw",height:"auto"}}></img>
+                          <img src={"./static/images/logo/teamfolio_logo.png"} alt="teamfolio logo" style={{width:"200px",maxWidth:"60vw",height:"auto"}}></img>
                         </Grid>
                     </Grid>
-
-
                     <Grid container spacing={1} alignItems="flex-end">
                         <Grid item>
                             <Face />

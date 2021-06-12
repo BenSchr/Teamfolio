@@ -58,7 +58,7 @@ const useStyles = makeStyles({
       <CardActionArea
       onClick={handleClickOpen}>
         <CardMedia className={classes.media}
-          image={"/static/images/profiles/"+(user_id.toString())+".jpg"}
+          image={"./static/images/profiles/"+(user_id.toString())+".jpg"}
           title={name}>{(!gesammelt)?(<LockOpenTwoToneIcon style={{ fontSize: 100, marginTop:"25%"}} color="secondary"/>):<div/>}</CardMedia>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">

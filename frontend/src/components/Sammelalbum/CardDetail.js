@@ -239,7 +239,7 @@ export function CardDetail(props) {
             >
               <img
                 src={
-                  "/static/images/profiles/" +
+                  "./static/images/profiles/" +
                   user_id.toString() +
                   ".jpg"
                 }

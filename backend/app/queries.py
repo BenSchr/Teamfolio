@@ -36,9 +36,15 @@ models.Steckbrief_Frage.frage_id==models.Frage.frage_id,
 models.User.user_id==user_id).statement,db.bind)
     df=df[["frage_id","frage","antwort"]]
     
+    query_dummy = db.query(models.Dummy_Antwort).filter(models.Dummy_Antwort.frage_id.in_(df["frage_id"].tolist())) 
+    query_user = db.query(models.Steckbrief_Frage).filter(models.Steckbrief_Frage.frage_id.in_(df["frage_id"].tolist()))     
+
+    dummy_answers = pd.read_sql(query_dummy.statement, db.bind)[["frage_id","antwort"]].drop_duplicates()
+    user_answers = pd.read_sql(query_user.statement, db.bind)[["frage_id","antwort"]].drop_duplicates()
+
+    union_answers=pd.concat([user_answers,dummy_answers])
     
-    df2 = pd.read_sql(db.query(models.Dummy_Antwort).filter(models.Dummy_Antwort.frage_id.in_(df["frage_id"].tolist())).statement, db.bind)
-    df=(df.merge(df2.groupby('frage_id')['antwort'].apply(list),how="left",on="frage_id",suffixes=["_original","_extra"]))
+    df=(df.merge(union_answers.groupby('frage_id')['antwort'].apply(list),how="left",on="frage_id",suffixes=["_original","_extra"]))
     quiz_dict=df.T.to_dict().values()
     quiz_list=[]
     for row in quiz_dict:

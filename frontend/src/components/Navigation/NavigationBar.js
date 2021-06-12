@@ -116,7 +116,7 @@ export function NavigationBar(props) {
          
           <Avatar
             alt="Remy Sharp"
-            src={"/static/images/profiles/" + user.user_id + ".jpg"}
+            src={"./static/images/profiles/" + user.user_id + ".jpg"}
           />
         </Grid>
         <Grid item>
@@ -192,7 +192,7 @@ export function NavigationBar(props) {
                 <div style={{ textAlign: "center" }}>
                   <img
                     alt="teamfolio logo"
-                    src="/static/images/logo/teamfolio_logo.png"
+                    src="./static/images/logo/teamfolio_logo.png"
                     height="40px"
                     width="auto"
                   />

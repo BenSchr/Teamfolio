@@ -1,8 +1,16 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+import os
+import sys
 
-DATABASE_URL = "sqlite:///../db/test.db"
+# determine if application is a script file or frozen exe
+if getattr(sys, 'frozen', False):
+    filepath = os.path.dirname(sys.executable)
+elif __file__:
+    filepath = os.path.dirname(__file__)
+DATABASE_URL = "sqlite:///"+os.path.join(filepath, "..","db","test.db")
+print(DATABASE_URL)
 # DATABASE_URL = "postgresql://user:password@postgresserver/db"
 
 engine = create_engine(

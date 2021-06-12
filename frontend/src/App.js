@@ -4,7 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
 
   Route, Switch
 } from "react-router-dom";
