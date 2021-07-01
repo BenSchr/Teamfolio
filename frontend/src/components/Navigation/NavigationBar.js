@@ -134,7 +134,7 @@ export function NavigationBar(props) {
           </ListItemIcon>
           <ListItemText primary={"Sammelalbum"}/>
         </ListItem>
-        <ListItem button component={Link} to="/statistics">
+        <ListItem button>
           <ListItemIcon>
             <EqualizerIcon />
           </ListItemIcon>

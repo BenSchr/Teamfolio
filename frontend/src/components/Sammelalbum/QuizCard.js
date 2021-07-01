@@ -177,7 +177,6 @@ export function QuizCard(props) {
       );
       if (response.status === 200) {
         updateUserState(user_id, true);
-        console.log(response);
         checkAchievements();
       }
     } catch (error) {

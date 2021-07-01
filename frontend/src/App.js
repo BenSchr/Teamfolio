@@ -49,9 +49,6 @@ return (
      {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/statistics">
-          <p>Statistiken</p>
-          </Route>
           <Route path="/achievements">
             <Erfolge updatePagename={setPagename} currentUser={currentUser}/>
           </Route>

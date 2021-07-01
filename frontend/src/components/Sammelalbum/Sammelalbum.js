@@ -207,7 +207,6 @@ export function Sammelalbum(props) {
       setLoading(true);
 
       try {
-        console.log("CurrentUser: " + currentUser);
         const response = await axios.get(
           `http://localhost:8000/user/` + currentUser + `/collection`
         );

@@ -32,6 +32,11 @@ class UserCollected(User):
     class Config:
         orm_mode = True
 
+class UserReduced(BaseModel):
+    user_id:int
+    vorname:str
+    nachname:str
+
 
 ## Frage_Antwort ##
 
@@ -94,3 +99,7 @@ class Erfolg(BaseModel):
 
 class Erfolg_gesammelt(Erfolg):
     gesammelt:int
+
+class Erfolg_stats(BaseModel):
+    erfolg_id:int
+    percent:int
